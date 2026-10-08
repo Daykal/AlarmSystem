@@ -1,0 +1,114 @@
+@startuml
+abstract class alarmsystem.model.Sensor {
+- String id
+- SensorLocation sensorLocation
+- SensorType sensorType
+- boolean isTriggered
++ {abstract}void trigger(boolean)
++ void reset()
++ boolean canResetOnSystemOff()
++ String getLabel()
++ String toString()
++ String getId()
++ SensorLocation getLocation()
++ SensorType getSensorType()
++ boolean isTriggered()
++ void setTriggered(boolean)
+}
+
+
+class alarmsystem.model.SmokeSensor {
++ void trigger(boolean)
++ boolean canResetOnSystemOff()
+}
+
+class alarmsystem.view.Menu {
+- Scanner scanner
+- AlarmSystem alarmSystem
+- boolean isRunning
++ void run()
+- void handleAddSensor()
+- void handleDeleteSensor()
+- void handleTriggerSensor()
+- void handleResetSensor()
+}
+
+
+class alarmsystem.model.MotionSensor {
++ void trigger(boolean)
+}
+
+class alarmsystem.controller.EventLogger {
++ {static} DateTimeFormatter timeFormatter
++ void logEvent(String)
+}
+
+
+class alarmsystem.Main {
+~ {static} void main()
+}
+
+interface alarmsystem.controller.AlarmSystem {
+~ void printAllSensorsLabel()
+~ void triggerAllSensors()
+~ void resetAllSensors()
+~ void addSensor(String,String,String)
+~ void deleteSensor(String)
+~ void triggerSensor(String)
+~ void resetSensor(String)
+~ void turnSystemOff()
+~ void turnSystemOn()
+~ int alarmedSensorsAmount()
+~ int sensorsAmount()
+~ boolean isSystemAlarming()
+~ boolean isSystemOn()
+}
+
+class alarmsystem.controller.DefaultAlarmSystem {
+- List<Sensor> sensors
+- EventLogger eventLogger
+- boolean isSystemOn
++ void printAllSensorsLabel()
++ void triggerAllSensors()
++ void resetAllSensors()
++ void addSensor(String,String,String)
++ void deleteSensor(String)
++ void triggerSensor(String)
++ void resetSensor(String)
++ void turnSystemOff()
++ void turnSystemOn()
++ int alarmedSensorsAmount()
++ int sensorsAmount()
++ boolean isSystemAlarming()
++ boolean isSystemOn()
+}
+
+
+class alarmsystem.model.DoorSensor {
+- boolean isDoorOpen
++ void trigger(boolean)
++ void reset()
++ String getLabel()
+}
+
+
+enum alarmsystem.model.SensorLocation {
++  HALL
++  OFFICE
++  STORAGE
++  GARAGE
+}
+
+enum alarmsystem.model.SensorType {
++  DOOR
++  SMOKE
++  MOTION
+}
+
+
+
+alarmsystem.model.Sensor <|-- alarmsystem.model.SmokeSensor
+alarmsystem.model.Sensor <|-- alarmsystem.model.MotionSensor
+alarmsystem.controller.AlarmSystem <|.. alarmsystem.controller.DefaultAlarmSystem
+alarmsystem.model.Sensor <|-- alarmsystem.model.DoorSensor
+@enduml
